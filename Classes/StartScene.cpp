@@ -53,8 +53,8 @@ bool Start::init() {
     // 3. add wheel panel sprite
     auto wheelPanelSprite = Sprite::create("wheel_sections_8.png");
 
-    wheelPanelSprite->setScale(MAX(playButtonMenuItem->getContentSize().width / visibleSize.width,
-                                         playButtonMenuItem->getContentSize().height / visibleSize.height));
+    wheelPanelSprite->setScale(MAX(wheelPanelSprite->getContentSize().width / visibleSize.width,
+                                   wheelPanelSprite->getContentSize().height / visibleSize.height));
 
     // check to see if play button does not load correctly
     if (wheelPanelSprite == nullptr ||
@@ -70,6 +70,19 @@ bool Start::init() {
     // 4. add wheel border sprite
     auto wheelBorder = Sprite::create("wheel_border.png");
 
+    wheelBorder->setScale(MAX(wheelBorder->getContentSize().width / visibleSize.width,
+                              wheelBorder->getContentSize().height / visibleSize.height));
+
+    // check to see if play button does not load correctly
+    if (wheelBorder == nullptr ||
+        wheelBorder->getContentSize().width <= 0 ||
+        wheelBorder->getContentSize().height <= 0) {
+        problemLoading("'wheel border'");
+    } else {
+        float x = origin.x + visibleSize.width / 2;
+        float y = origin.y + visibleSize.height / 5 * 3;
+        wheelBorder->setPosition(Vec2(x,y));
+    }
 
     // 10. add wheel arrow, last because it is infront of the wheel border and
     auto wheelArrow = Sprite::create("wheel_arrow.png");
@@ -81,7 +94,7 @@ bool Start::init() {
     // adding all the objects into the scene
     this->addChild(menu);
     this->addChild(wheelPanelSprite);
-    // this->addChild(wheelBorder);
+    this->addChild(wheelBorder);
     return true;
 }
 

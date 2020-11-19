@@ -5,7 +5,6 @@ proj.*/
 cocos2d/
 
 # ignore cocos new game built-ins
-CMakeLists.txt
 .cocos-project.json
 
 
