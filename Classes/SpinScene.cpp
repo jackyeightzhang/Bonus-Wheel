@@ -54,8 +54,8 @@ int Spin::prizeOutput() {
 float Spin::prizeRotation(int prize) {
     // spin 5 times for the fancy effect, then add an extra spin
     float ROT_DEGREE = 360/16;
-    CCLOGINFO("I should get prize %i", prize+1);
-    return (5 * 360) + (360 - (ROT_DEGREE * (1 + (prize * 2) ) ) );
+    CCLOG("I should get prize %i", prize+1);
+    return (8 * 360) + (360 - (ROT_DEGREE * (1 + (prize * 2) ) ) );
 }
 
 bool Spin::init() {
@@ -102,16 +102,15 @@ bool Spin::init() {
     // spin wheel
     int prize = prizeOutput();
     auto spinAction = RotateBy::create(5,prizeRotation(prize));
-    // auto easedSpin = EaseOutElastic::create();
+    auto easedSpin = EaseOut::create(spinAction, 3);
     auto delay1Sec = DelayTime::create(1);
 
-    wheelPanelSprite->runAction(spinAction);
+    wheelPanelSprite->runAction(easedSpin);
     for(int i = 0; i < prizes.size(); i++) {
-        prizes.at(i)->runAction(spinAction->clone());
+        prizes.at(i)->runAction(easedSpin->clone());
     }
     for(int j = 0; j < amounts.size(); j++) {
-        amounts.at(j)->runAction(spinAction->clone());
+        amounts.at(j)->runAction(easedSpin->clone());
     }
     return true;
-
 }
