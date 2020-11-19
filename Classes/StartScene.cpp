@@ -50,6 +50,10 @@ bool Start::init() {
         playButtonMenuItem->setPosition(Vec2(x,y));
     }
 
+    // adding all the menu items to menu
+    auto menu = Menu::create(playButtonMenuItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+
     // 3. add wheel panel sprite
     auto wheelPanelSprite = Sprite::create("wheel_sections_8.png");
 
@@ -101,15 +105,52 @@ bool Start::init() {
         wheelArrow->setPosition(Vec2(x,y));
     }
 
-    // adding all the menu items to menu
-    auto menu = Menu::create(playButtonMenuItem, NULL);
-    menu->setPosition(Vec2::ZERO);
+    // 6. adding all the prize sprites
+    auto life30Sprite_1 = Sprite::create("heart.png");
+    auto brush3Sprite_2 = Sprite::create("brush.png");
+    auto gems35Sprite_3 = Sprite::create("gem.png");
+    auto hammer3Sprite_4 = Sprite::create("hammer.png");
+    auto coins750Sprite_5 = Sprite::create("coin.png");
+    auto brush1Sprite_6 = Sprite::create("brush.png");
+    auto gems75Sprite_7 = Sprite::create("gem.png");
+    auto hammer1Sprite_8 = Sprite::create("hammer.png");
+
+    Vector<Sprite*> prizes = {
+                              life30Sprite_1,
+                              brush3Sprite_2,
+                              gems35Sprite_3,
+                              hammer3Sprite_4,
+                              coins750Sprite_5,
+                              brush1Sprite_6,
+                              gems75Sprite_7,
+                              hammer1Sprite_8
+                              };
+
+    float ROT_DEGREE = 360/16;
+    float PRIZE_SIZE = wheelScale * life30Sprite_1->getContentSize().height;
+    for(int i = 0; i < prizes.size(); i++) {
+        auto sprite = prizes.at(i);
+        sprite->setContentSize(Size(PRIZE_SIZE,PRIZE_SIZE));
+
+        if (sprite == nullptr ||
+            sprite->getContentSize().width <= 0 ||
+            sprite->getContentSize().height <= 0) {
+            problemLoading("'prize'");
+        } else {
+            float x = origin.x + visibleSize.width / 2;
+            float y = origin.y + visibleSize.height / 5 * 3;
+            sprite->setPosition(Vec2(x,y));
+            sprite->setAnchorPoint(Vec2(0.5,-2.5));
+            sprite->setRotation(ROT_DEGREE * ( 1 + ( i * 2 ) ) );
+            this->addChild(sprite,2);
+        }
+    }
 
     // adding all the objects into the scene
-    this->addChild(menu);
-    this->addChild(wheelPanelSprite);
-    this->addChild(wheelBorder);
-    this->addChild(wheelArrow);
+    this->addChild(menu,0);
+    this->addChild(wheelPanelSprite,1);
+    this->addChild(wheelBorder,3);
+    this->addChild(wheelArrow,4);
     return true;
 }
 
