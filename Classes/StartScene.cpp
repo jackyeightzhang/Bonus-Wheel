@@ -7,6 +7,7 @@
 //
 
 #include "StartScene.h"
+#include "ui/CocosGUI.h"
 
 USING_NS_CC;
 
@@ -31,12 +32,17 @@ bool Start::init() {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // 2. add a menu button, which is clicked to go to end scene and application
-    auto playButtonMenuItem = MenuItemImage::create("spin_button.png",
-                                                 "spin_button.png",
-                                                 CC_CALLBACK_1(Start::menuCloseCallback,this)
-                                                );
+    // auto playButtonMenuItem = MenuItemImage::create("spin_button.png", "spin_button.png", CC_CALLBACK_1());
+    auto playButtonMenuItem = ui::Button::create("spin_button.png",
+                                                          "spin_button.png",
+                                                          "spin_button.png");
+    playButtonMenuItem->setTitleAlignment(TextHAlignment::CENTER);
+    playButtonMenuItem->setTitleText("Play On");
+//    playButtonMenuItem->setPressedActionEnabled(true);
+//    playButtonMenuItem->setZoomScale(-0.5);
+    playButtonMenuItem->addTouchEventListener(CC_CALLBACK_1(Start::menuCloseCallback,this));
     playButtonMenuItem->setScale(MAX(playButtonMenuItem->getContentSize().width / visibleSize.width,
-                                           playButtonMenuItem->getContentSize().height / visibleSize.height));
+                                     playButtonMenuItem->getContentSize().height / visibleSize.height));
 
 
     // check to see if play button does not load correctly
@@ -51,8 +57,8 @@ bool Start::init() {
     }
 
     // adding all the menu items to menu
-    auto menu = Menu::create(playButtonMenuItem, NULL);
-    menu->setPosition(Vec2::ZERO);
+//    auto menu = Menu::create(playButtonMenuItem, NULL);
+//    menu->setPosition(Vec2::ZERO);
 
     // 3. add wheel panel sprite
     auto wheelPanelSprite = Sprite::create("wheel_sections_8.png");
@@ -147,7 +153,7 @@ bool Start::init() {
     }
 
     // adding all the objects into the scene
-    this->addChild(menu,0);
+    this->addChild(playButtonMenuItem,0);
     this->addChild(wheelPanelSprite,1);
     this->addChild(wheelBorder,3);
     this->addChild(wheelArrow,4);
@@ -159,7 +165,7 @@ void Start::menuCloseCallback(Ref* pSender)
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
 
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
+    EventCustom customEndEvent("game_scene_close_event");
+    _eventDispatcher->dispatchEvent(&customEndEvent);
 
 }
