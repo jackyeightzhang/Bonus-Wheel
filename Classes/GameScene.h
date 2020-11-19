@@ -24,6 +24,10 @@ public:
                                                         const cocos2d::Vec2& origin,
                                                         const cocos2d::Size& visibleSize,
                                                         const float& wheelScale);
+    static bool initWheelMisc(Scene* scene,
+                              const cocos2d::Vec2& origin,
+                              const cocos2d::Size& visibleSize,
+                              const float& wheelScale);
     virtual bool initPlayButton(const cocos2d::Vec2& origin, const cocos2d::Size& visibleSize);
     virtual bool initWheel(const cocos2d::Vec2& origin, const cocos2d::Size& visibleSize);
 

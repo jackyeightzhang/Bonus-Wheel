@@ -18,8 +18,7 @@ Scene* Game::createScene() {
 
 static void problemLoading(const char* filename)
 {
-    printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+    CCLOGERROR("Error while loading: %s\n", filename);
 }
 
 bool Game::initPlayButton(const Vec2& origin, const Size& visibleSize) {
@@ -160,6 +159,47 @@ Vector<Label*> Game::initAmounts(Scene* scene, const Vec2& origin, const Size& v
     return amounts;
 }
 
+bool Game::initWheelMisc(Scene* scene, const cocos2d::Vec2& origin, const cocos2d::Size& visibleSize, const float& wheelScale) {
+    // create wheel border node
+    auto wheelBorder = Sprite::create("wheel_border.png");
+
+    wheelBorder->setScale(wheelScale);
+
+    // check to see if border does not load correctly
+    if (wheelBorder == nullptr ||
+        wheelBorder->getContentSize().width <= 0 ||
+        wheelBorder->getContentSize().height <= 0) {
+        problemLoading("'wheel border'");
+    } else {
+        // set location of border
+        float x = origin.x + visibleSize.width / 2;
+        float y = origin.y + visibleSize.height / 5 * 3;
+        wheelBorder->setPosition(Vec2(x,y));
+    }
+
+    // create wheel arrow, last because it is infront of the wheel border and wheel panel
+    auto wheelArrow = Sprite::create("wheel_arrow.png");
+
+    wheelArrow->setScale(wheelScale);
+
+    // check to see if arrow does not load correctly
+    if (wheelArrow == nullptr ||
+        wheelArrow->getContentSize().width <= 0 ||
+        wheelArrow->getContentSize().height <= 0) {
+        problemLoading("'wheel arrow'");
+    } else {
+        // set location of arrow
+        float x = origin.x + visibleSize.width / 2;
+        float y = origin.y + visibleSize.height / 5 * 4;
+        wheelArrow->setPosition(Vec2(x,y));
+    }
+
+    scene->addChild(wheelBorder,3);
+    scene->addChild(wheelArrow,4);
+
+    return true;
+}
+
 bool Game::initWheel(const Vec2& origin, const cocos2d::Size& visibleSize){
     auto wheelPanelSprite = Sprite::create("wheel_sections_8.png");
 
@@ -179,48 +219,18 @@ bool Game::initWheel(const Vec2& origin, const cocos2d::Size& visibleSize){
         wheelPanelSprite->setPosition(Vec2(x,y));
     }
 
-    // 4. add wheel border sprite
-    auto wheelBorder = Sprite::create("wheel_border.png");
+    // add misc wheel nodes
+    initWheelMisc(this, origin, visibleSize, wheelScale);
 
-    wheelBorder->setScale(wheelScale);
+    // add prizes sprites
+    Vector<Sprite*> prizes = initPrizes(this, origin, visibleSize, wheelScale);
 
-    // check to see if play button does not load correctly
-    if (wheelBorder == nullptr ||
-        wheelBorder->getContentSize().width <= 0 ||
-        wheelBorder->getContentSize().height <= 0) {
-        problemLoading("'wheel border'");
-    } else {
-        float x = origin.x + visibleSize.width / 2;
-        float y = origin.y + visibleSize.height / 5 * 3;
-        wheelBorder->setPosition(Vec2(x,y));
-    }
-
-    // 5. add wheel arrow, last because it is infront of the wheel border and
-    auto wheelArrow = Sprite::create("wheel_arrow.png");
-
-    wheelArrow->setScale(wheelScale);
-
-    // check to see if play button does not load correctly
-    if (wheelArrow == nullptr ||
-        wheelArrow->getContentSize().width <= 0 ||
-        wheelArrow->getContentSize().height <= 0) {
-        problemLoading("'wheel arrow'");
-    } else {
-        float x = origin.x + visibleSize.width / 2;
-        float y = origin.y + visibleSize.height / 5 * 4;
-        wheelArrow->setPosition(Vec2(x,y));
-    }
-
-    // 6. add prizes sprites
-    Vector<Sprite*> prizes = initPrizes(this, origin, visibleSize,wheelScale);
-
-    // 7. add prize labels
-    initAmounts(this, origin, visibleSize, wheelScale * prizes.at(0)->getContentSize().height);
+    // add prize labels
+    float prize_size = wheelScale * prizes.at(0)->getContentSize().height;
+    initAmounts(this, origin, visibleSize, prize_size);
 
     // adding all the objects into the scene
     this->addChild(wheelPanelSprite,1);
-    this->addChild(wheelBorder,3);
-    this->addChild(wheelArrow,4);
 
     return true;
 }
