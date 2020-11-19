@@ -152,6 +152,45 @@ bool Start::init() {
         }
     }
 
+    // 7. adding labels to all the prize sprites
+    auto life30Label_1 = Label::createWithSystemFont("30x\nmins","Arial", 12, Size(PRIZE_SIZE,PRIZE_SIZE),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    auto brush3Label_2 = Label::createWithSystemFont("3x","Arial", 12, Size(PRIZE_SIZE,PRIZE_SIZE),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    auto gems35Label_3 = Label::createWithSystemFont("35x","Arial", 12, Size(PRIZE_SIZE,PRIZE_SIZE),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    auto hammer3Label_4 = Label::createWithSystemFont("3x","Arial", 12, Size(PRIZE_SIZE,PRIZE_SIZE),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    auto coins750Label_5 = Label::createWithSystemFont("750x","Arial", 12, Size(PRIZE_SIZE,PRIZE_SIZE),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    auto brush1Label_6 = Label::createWithSystemFont("1x","Arial", 12, Size(PRIZE_SIZE,PRIZE_SIZE),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    auto gems75Label_7 = Label::createWithSystemFont("75x","Arial", 12, Size(PRIZE_SIZE,PRIZE_SIZE),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+    auto hammer1Label_8 = Label::createWithSystemFont("1x","Arial", 12, Size(PRIZE_SIZE,PRIZE_SIZE),TextHAlignment::RIGHT,TextVAlignment::BOTTOM);
+
+    Vector<Label*> amounts = {
+            life30Label_1,
+            brush3Label_2,
+            gems35Label_3,
+            hammer3Label_4,
+            coins750Label_5,
+            brush1Label_6,
+            gems75Label_7,
+            hammer1Label_8
+    };
+
+    for(int i = 0; i < amounts.size(); i++) {
+        auto label = amounts.at(i);
+        label->setContentSize(Size(PRIZE_SIZE,PRIZE_SIZE));
+
+        if (label == nullptr ||
+            label->getContentSize().width <= 0 ||
+            label->getContentSize().height <= 0) {
+            problemLoading("'amounts'");
+        } else {
+            float x = origin.x + visibleSize.width / 2;
+            float y = origin.y + visibleSize.height / 5 * 3;
+            label->setPosition(Vec2(x,y));
+            label->setAnchorPoint(Vec2(0.5,-2.5));
+            label->setRotation(ROT_DEGREE * ( 1 + ( i * 2 ) ) );
+            this->addChild(label,2);
+        }
+    }
+
     // adding all the objects into the scene
     this->addChild(playButtonMenuItem,0);
     this->addChild(wheelPanelSprite,1);
