@@ -7,6 +7,7 @@
 //
 
 #include "GameScene.h"
+#include "SpinScene.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
@@ -55,7 +56,7 @@ bool Game::initPlayButton(const Vec2& origin, const Size& visibleSize) {
     return true;
 }
 
-Vector<cocos2d::Sprite*> Game::initPrizes(const cocos2d::Vec2& origin, const cocos2d::Size& visibleSize, const float& wheelScale) {
+Vector<Sprite*> Game::initPrizes(Scene* scene, const Vec2& origin, const Size& visibleSize, const float& wheelScale) {
     // create sprites and insert into vector
     auto life30Sprite_1 = Sprite::create("heart.png");
     auto brush3Sprite_2 = Sprite::create("brush.png");
@@ -90,12 +91,12 @@ Vector<cocos2d::Sprite*> Game::initPrizes(const cocos2d::Vec2& origin, const coc
             // to a sector in the panel
             sprite->setAnchorPoint(Vec2(0.5,-2.5));
             sprite->setRotation( ROT_DEGREE * ( 1 + ( i * 2 ) ) );
-            this->addChild(sprite,2);
+            scene->addChild(sprite,2);
         }
     }
     return prizes;
 }
-Vector<cocos2d::Label*> Game::initAmounts(const cocos2d::Vec2& origin, const cocos2d::Size& visibleSize, const float& prize_size) {
+Vector<Label*> Game::initAmounts(Scene* scene, const Vec2& origin, const Size& visibleSize, const float& prize_size) {
     // create prize labels
     auto life30Label_1 = Label::createWithSystemFont("30x\nmins","Arial", 9,
                                                 Size(prize_size,prize_size),
@@ -152,7 +153,7 @@ Vector<cocos2d::Label*> Game::initAmounts(const cocos2d::Vec2& origin, const coc
             // set the sprite to be about the anchor point and rotated around to match the wheel panel
             label->setAnchorPoint(Vec2(0.5,-2.5));
             label->setRotation(( ROT_DEGREE * ( 1 + ( i * 2 ) ) ) + 5 );
-            this->addChild(label,2);
+            scene->addChild(label,2);
         }
     }
 
@@ -211,10 +212,10 @@ bool Game::initWheel(const Vec2& origin, const cocos2d::Size& visibleSize){
     }
 
     // 6. add prizes sprites
-    Vector<Sprite*> prizes = initPrizes(origin, visibleSize,wheelScale);
+    Vector<Sprite*> prizes = initPrizes(this, origin, visibleSize,wheelScale);
 
     // 7. add prize labels
-    initAmounts(origin, visibleSize, wheelScale * prizes.at(0)->getContentSize().height );
+    initAmounts(this, origin, visibleSize, wheelScale * prizes.at(0)->getContentSize().height);
 
     // adding all the objects into the scene
     this->addChild(wheelPanelSprite,1);
@@ -244,86 +245,8 @@ bool Game::init() {
     return true;
 }
 
-bool Game::initSpin() {
-
-    // 1. initialize Scene supercslass
-    if(!Scene::init()) {
-        return false;
-    }
-
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-
-    auto wheelPanelSprite = Sprite::create("wheel_sections_8.png");
-
-    float wheelScale = MAX(wheelPanelSprite->getContentSize().width / visibleSize.width,
-                           wheelPanelSprite->getContentSize().height / visibleSize.height);
-
-    wheelPanelSprite->setScale(wheelScale);
-
-    // check to see if play button does not load correctly
-    if (wheelPanelSprite == nullptr ||
-        wheelPanelSprite->getContentSize().width <= 0 ||
-        wheelPanelSprite->getContentSize().height <= 0) {
-        problemLoading("'wheel panel'");
-    } else {
-        float x = origin.x + visibleSize.width / 2;
-        float y = origin.y + visibleSize.height / 5 * 3;
-        wheelPanelSprite->setPosition(Vec2(x,y));
-    }
-
-    // 4. add wheel border sprite
-    auto wheelBorder = Sprite::create("wheel_border.png");
-
-    wheelBorder->setScale(wheelScale);
-
-    // check to see if play button does not load correctly
-    if (wheelBorder == nullptr ||
-        wheelBorder->getContentSize().width <= 0 ||
-        wheelBorder->getContentSize().height <= 0) {
-        problemLoading("'wheel border'");
-    } else {
-        float x = origin.x + visibleSize.width / 2;
-        float y = origin.y + visibleSize.height / 5 * 3;
-        wheelBorder->setPosition(Vec2(x,y));
-    }
-
-    // 5. add wheel arrow, last because it is infront of the wheel border and
-    auto wheelArrow = Sprite::create("wheel_arrow.png");
-
-    wheelArrow->setScale(wheelScale);
-
-    // check to see if play button does not load correctly
-    if (wheelArrow == nullptr ||
-        wheelArrow->getContentSize().width <= 0 ||
-        wheelArrow->getContentSize().height <= 0) {
-        problemLoading("'wheel arrow'");
-    } else {
-        float x = origin.x + visibleSize.width / 2;
-        float y = origin.y + visibleSize.height / 5 * 4;
-        wheelArrow->setPosition(Vec2(x,y));
-    }
-
-    // 6. add prizes sprites
-    Vector<Sprite*> prizes = initPrizes(origin, visibleSize,wheelScale);
-
-    // 7. add prize labels
-    Vector<Label*> amounts = initAmounts(origin, visibleSize,
-                                wheelScale * prizes.at(0)->getContentSize().height );
-
-    // adding all the objects into the scene
-    this->addChild(wheelPanelSprite,1);
-    this->addChild(wheelBorder,3);
-    this->addChild(wheelArrow,4);
-
-    // 8. spin wheel
-
-    return true;
-
-}
-
 void Game::spinSceneCallback(Ref* pSender)
 {
-//    auto spinScene =
-    // Director::getInstance()->replaceScene();
+    auto spinScene = Spin::create();
+    Director::getInstance()->replaceScene(spinScene);
 }

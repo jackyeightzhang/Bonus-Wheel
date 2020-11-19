@@ -16,18 +16,18 @@ public:
     static cocos2d::Scene* createScene();
 
     // helper functions for initializing scene
-    virtual cocos2d::Vector<cocos2d::Sprite*> initPrizes(const cocos2d::Vec2& origin,
-                                                         const cocos2d::Size& visibleSize,
-                                                         const float& wheelScale);
-    virtual cocos2d::Vector<cocos2d::Label*> initAmounts(const cocos2d::Vec2& origin,
-                                                         const cocos2d::Size& visibleSize,
-                                                         const float& wheelScale);
+    static cocos2d::Vector<cocos2d::Sprite*> initPrizes(Scene* scene,
+                                                        const cocos2d::Vec2& origin,
+                                                        const cocos2d::Size& visibleSize,
+                                                        const float& wheelScale);
+    static cocos2d::Vector<cocos2d::Label*> initAmounts(Scene* scene,
+                                                        const cocos2d::Vec2& origin,
+                                                        const cocos2d::Size& visibleSize,
+                                                        const float& wheelScale);
     virtual bool initPlayButton(const cocos2d::Vec2& origin, const cocos2d::Size& visibleSize);
     virtual bool initWheel(const cocos2d::Vec2& origin, const cocos2d::Size& visibleSize);
 
     virtual bool init();
-    virtual bool initSpin();
-
 
     // a callback method for when Play is pressed
     void spinSceneCallback(cocos2d::Ref* pSender);
