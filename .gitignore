@@ -1,0 +1,11 @@
+# ignore the project directories that are not android
+proj.*/
+
+# ignore the cocos library
+cocos2d/
+
+# ignore cocos new game built-ins
+CMakeLists.txt
+.cocos-project.json
+
+
