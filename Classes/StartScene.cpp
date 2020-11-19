@@ -53,8 +53,10 @@ bool Start::init() {
     // 3. add wheel panel sprite
     auto wheelPanelSprite = Sprite::create("wheel_sections_8.png");
 
-    wheelPanelSprite->setScale(MAX(wheelPanelSprite->getContentSize().width / visibleSize.width,
-                                   wheelPanelSprite->getContentSize().height / visibleSize.height));
+    float wheelScale = MAX(wheelPanelSprite->getContentSize().width / visibleSize.width,
+                     wheelPanelSprite->getContentSize().height / visibleSize.height);
+
+    wheelPanelSprite->setScale(wheelScale);
 
     // check to see if play button does not load correctly
     if (wheelPanelSprite == nullptr ||
@@ -70,8 +72,7 @@ bool Start::init() {
     // 4. add wheel border sprite
     auto wheelBorder = Sprite::create("wheel_border.png");
 
-    wheelBorder->setScale(MAX(wheelBorder->getContentSize().width / visibleSize.width,
-                              wheelBorder->getContentSize().height / visibleSize.height));
+    wheelBorder->setScale(wheelScale);
 
     // check to see if play button does not load correctly
     if (wheelBorder == nullptr ||
@@ -84,8 +85,21 @@ bool Start::init() {
         wheelBorder->setPosition(Vec2(x,y));
     }
 
-    // 10. add wheel arrow, last because it is infront of the wheel border and
+    // 5. add wheel arrow, last because it is infront of the wheel border and
     auto wheelArrow = Sprite::create("wheel_arrow.png");
+
+    wheelArrow->setScale(wheelScale);
+
+    // check to see if play button does not load correctly
+    if (wheelArrow == nullptr ||
+        wheelArrow->getContentSize().width <= 0 ||
+        wheelArrow->getContentSize().height <= 0) {
+        problemLoading("'wheel arrow'");
+    } else {
+        float x = origin.x + visibleSize.width / 2;
+        float y = origin.y + visibleSize.height / 5 * 4;
+        wheelArrow->setPosition(Vec2(x,y));
+    }
 
     // adding all the menu items to menu
     auto menu = Menu::create(playButtonMenuItem, NULL);
@@ -95,6 +109,7 @@ bool Start::init() {
     this->addChild(menu);
     this->addChild(wheelPanelSprite);
     this->addChild(wheelBorder);
+    this->addChild(wheelArrow);
     return true;
 }
 
