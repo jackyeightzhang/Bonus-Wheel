@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "StartScene.h"
+#include "GameScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 
@@ -95,7 +95,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     // create a scene
-    auto scene = Start::createScene();
+    auto scene = Game::createScene();
 
     // run scene
     director->runWithScene(scene);
