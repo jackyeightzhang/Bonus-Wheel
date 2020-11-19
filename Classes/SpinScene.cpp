@@ -20,6 +20,44 @@ static void problemLoading(const char* filename)
     CCLOGERROR("Error while loading: %s\n", filename);
 }
 
+int Spin::prizeOutput() {
+    // generate a random number between 1-100
+    int randomNumber = random(1,100);
+
+    // prize 1
+    if(randomNumber <= 20) {
+        return 0;
+    // prize 2
+    } else if(randomNumber <= 30) {
+        return 1;
+    // prize 3
+    } else if(randomNumber <= 40) {
+        return 2;
+    // prize 4
+    } else if(randomNumber <= 50) {
+        return 3;
+    // prize 5
+    } else if(randomNumber <= 55) {
+        return 4;
+    // prize 6
+    } else if(randomNumber <= 75) {
+        return 5;
+    // prize 7
+    } else if(randomNumber <= 80) {
+        return 6;
+    //prize 8
+    } else {
+        return 7;
+    }
+}
+
+float Spin::prizeRotation(int prize) {
+    // spin 5 times for the fancy effect, then add an extra spin
+    float ROT_DEGREE = 360/16;
+    CCLOGINFO("I should get prize %i", prize+1);
+    return (5 * 360) + (360 - (ROT_DEGREE * (1 + (prize * 2) ) ) );
+}
+
 bool Spin::init() {
 
     // 1. initialize Scene supercslass
@@ -62,9 +100,18 @@ bool Spin::init() {
 
 
     // spin wheel
-    auto delay = DelayTime::create(1);
+    int prize = prizeOutput();
+    auto spinAction = RotateBy::create(5,prizeRotation(prize));
+    // auto easedSpin = EaseOutElastic::create();
+    auto delay1Sec = DelayTime::create(1);
 
-    CCLOG("SPINNING");
+    wheelPanelSprite->runAction(spinAction);
+    for(int i = 0; i < prizes.size(); i++) {
+        prizes.at(i)->runAction(spinAction->clone());
+    }
+    for(int j = 0; j < amounts.size(); j++) {
+        amounts.at(j)->runAction(spinAction->clone());
+    }
     return true;
 
 }

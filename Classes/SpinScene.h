@@ -16,6 +16,9 @@ public:
     static cocos2d::Scene* createScene();
 
     // helper functions for initializing scene
+    virtual int prizeOutput();
+    virtual float prizeRotation(int prize);
+
     virtual bool init();
 
     // a callback method for when Play is pressed
