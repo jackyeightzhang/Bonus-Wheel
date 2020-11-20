@@ -13,13 +13,13 @@
 
 class Prize : public cocos2d::Scene {
 public:
-    static cocos2d::Scene* createScene(int pr, float ps);
+    static cocos2d::Scene* createScene();
 
-    virtual bool init(int pr, float ps);
-
-    static Prize* create(int pr, float ps);
+    virtual bool init();
 
     void claimPrizeCallBack(cocos2d::Ref* pSender);
+
+    CREATE_FUNC(Prize);
 
 private:
     int prizeNumber;

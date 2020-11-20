@@ -11,23 +11,8 @@
 
 USING_NS_CC;
 
-Prize* Prize::create(int pr, float ps) {
-    Prize *pRet = new(std::nothrow) Prize();
-    if (pRet && pRet->init(pr,ps))
-    {
-        pRet->autorelease();
-        return pRet;
-    }
-    else
-    {
-        delete pRet;
-        pRet = NULL;
-        return NULL;
-    }
-}
-
-Scene* Prize::createScene(int pr, float ps) {
-    return Prize::create(pr, ps);
+Scene* Prize::createScene() {
+    return Prize::create();
 }
 
 static void problemLoading(const char* filename)
@@ -35,14 +20,11 @@ static void problemLoading(const char* filename)
     CCLOGERROR("Error while loading: %s\n", filename);
 }
 
-bool Prize::init(int pr, float ps) {
+bool Prize::init() {
     // initialize Scene supercslass
     if(!Scene::init()) {
         return false;
     }
-
-    prizeNumber = pr;
-    prizeSize = ps;
 
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -73,15 +55,18 @@ bool Prize::init(int pr, float ps) {
         float x = origin.x + visibleSize.width / 2;
         float y = origin.y + visibleSize.height / 5 * 1;
         playButton->setPosition(Vec2(x,y));
+        this->addChild(playButton, 0);
     }
 
-    this->addChild(playButton, 0);
 
     Sprite* prizeSprite;
     Label* prizeAmount;
 
+    prizeNumber = UserDefault::getInstance()->getIntegerForKey("prize");
+    prizeSize = UserDefault::getInstance()->getFloatForKey("prizeSize");
+
     switch(prizeNumber) {
-        case 0 :
+        case 0:
             prizeSprite = Sprite::create("heart.png");
             prizeAmount = Label::createWithSystemFont("30x\nmins","Arial", 9,
                                                       Size(prizeSize,prizeSize),
@@ -178,18 +163,29 @@ bool Prize::init(int pr, float ps) {
         this->addChild(prizeAmount,1);
     }
 
-    auto emitter = ParticleSun::create();
-//    emitter->setDuration(ParticleSystem::DURATION_INFINITY);
-//    emitter->setEnd
+    // creating particle effects keeps crashing the application
+//    auto fancyParticle = CallFunc::create([&](){
+//        auto emitter = ParticleSun::create();
+//        emitter->setDuration(ParticleSystem::DURATION_INFINITY);
+//        emitter->setPosition(prizeAmount->getPosition());
+//        emitter->setEmitterMode(ParticleSystem::Mode::RADIUS);
+//        emitter->setStartRadius(100);
+//        emitter->setEndRadius(ParticleSystem::START_RADIUS_EQUAL_TO_END_RADIUS);
+//        emitter->setStartRadiusVar(0);
+//        this->addChild(emitter);
+//    });
 
-auto shiftDown = MoveBy::create(2, Vec2(0, -visibleSize.height / 3));
+
+    auto shiftDown = MoveBy::create(2, Vec2(0, -visibleSize.height / 3));
     auto scaleUp = ScaleBy::create(2,1.5);
     auto spawnDisplay = Spawn::create(shiftDown, scaleUp, nullptr);
 
-    auto sequence = Sequence::create(spawnDisplay, nullptr);
+    auto sequence = Sequence::create(spawnDisplay,
+//            fancyParticle,
+            nullptr);
 
-    prizeSprite->runAction(sequence);
-    prizeAmount->runAction(sequence);
+    prizeSprite->runAction(sequence->clone());
+    prizeAmount->runAction(sequence->clone());
 
     return true;
 }

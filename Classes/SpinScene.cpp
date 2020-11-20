@@ -98,10 +98,10 @@ bool Spin::init() {
     float prize_size = wheelScale * prizes.at(0)->getContentSize().height;
     Vector<Label*> amounts = Game::initAmounts(this, origin, visibleSize, prize_size);
 
-
-
     // spin wheel
     int prize = prizeOutput();
+    UserDefault::getInstance()->setIntegerForKey("prize",prize);
+    UserDefault::getInstance()->setFloatForKey("prizeSize",prize_size);
     auto spinAction = RotateBy::create(5,prizeRotation(prize));
     auto easedSpin = EaseOut::create(spinAction, 3);
     auto delaySec = DelayTime::create(1);
@@ -120,6 +120,6 @@ bool Spin::init() {
 
 void Spin::prizeSceneCallBack(Ref* pSender, int pr, float ps)
 {
-    auto prizeScene = Prize::create(pr,ps);
+    auto prizeScene = Prize::create();
     Director::getInstance()->replaceScene(prizeScene);
 }
