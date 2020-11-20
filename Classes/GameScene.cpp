@@ -242,7 +242,6 @@ bool Game::init() {
         return false;
     }
 
-
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     auto visibleSize = Director::getInstance()->getVisibleSize();
 

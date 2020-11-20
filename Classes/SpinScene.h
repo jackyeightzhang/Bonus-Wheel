@@ -21,8 +21,7 @@ public:
 
     virtual bool init();
 
-    // a callback method for when Play is pressed
-    void spinEndCallback(cocos2d::Ref* pSender);
+    void prizeSceneCallBack(cocos2d::Ref* pSender, int pr, float ps);
 
     CREATE_FUNC(Spin);
 };

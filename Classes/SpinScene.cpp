@@ -8,6 +8,7 @@
 
 #include "SpinScene.h"
 #include "GameScene.h"
+#include "PrizeScene.h"
 
 USING_NS_CC;
 
@@ -60,7 +61,7 @@ float Spin::prizeRotation(int prize) {
 
 bool Spin::init() {
 
-    // 1. initialize Scene supercslass
+    // initialize Scene supercslass
     if(!Scene::init()) {
         return false;
     }
@@ -103,14 +104,22 @@ bool Spin::init() {
     int prize = prizeOutput();
     auto spinAction = RotateBy::create(5,prizeRotation(prize));
     auto easedSpin = EaseOut::create(spinAction, 3);
-    auto delay1Sec = DelayTime::create(1);
+    auto delay6sec = DelayTime::create(5);
+    auto transition = CallFunc::create([&](){prizeSceneCallBack(this, prize, prize_size);});
 
-    wheelPanelSprite->runAction(easedSpin);
+    auto seq = Sequence::create(easedSpin, delay6sec, transition, nullptr);
+
     for(int i = 0; i < prizes.size(); i++) {
-        prizes.at(i)->runAction(easedSpin->clone());
+        prizes.at(i)->runAction(seq->clone());
+        amounts.at(i)->runAction(seq->clone());
     }
-    for(int j = 0; j < amounts.size(); j++) {
-        amounts.at(j)->runAction(easedSpin->clone());
-    }
+    wheelPanelSprite->runAction(seq->clone());
+
     return true;
+}
+
+void Spin::prizeSceneCallBack(Ref* pSender, int pr, float ps)
+{
+    auto prizeScene = Prize::create();
+    Director::getInstance()->replaceScene(prizeScene);
 }
