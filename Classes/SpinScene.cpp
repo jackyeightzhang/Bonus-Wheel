@@ -104,10 +104,10 @@ bool Spin::init() {
     int prize = prizeOutput();
     auto spinAction = RotateBy::create(5,prizeRotation(prize));
     auto easedSpin = EaseOut::create(spinAction, 3);
-    auto delay6sec = DelayTime::create(5);
+    auto delaySec = DelayTime::create(1);
     auto transition = CallFunc::create([&](){prizeSceneCallBack(this, prize, prize_size);});
 
-    auto seq = Sequence::create(easedSpin, delay6sec, transition, nullptr);
+    auto seq = Sequence::create(easedSpin, delaySec, transition, nullptr);
 
     for(int i = 0; i < prizes.size(); i++) {
         prizes.at(i)->runAction(seq->clone());
@@ -120,6 +120,6 @@ bool Spin::init() {
 
 void Spin::prizeSceneCallBack(Ref* pSender, int pr, float ps)
 {
-    auto prizeScene = Prize::create();
+    auto prizeScene = Prize::create(pr,ps);
     Director::getInstance()->replaceScene(prizeScene);
 }

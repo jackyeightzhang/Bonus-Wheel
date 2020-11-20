@@ -15,13 +15,15 @@ class Prize : public cocos2d::Scene {
 public:
     static cocos2d::Scene* createScene(int pr, float ps);
 
-    // helper functions for initializing scene
-    virtual bool init();
+    virtual bool init(int pr, float ps);
 
-    CREATE_FUNC(Prize);
+    static Prize* create(int pr, float ps);
+
+    void claimPrizeCallBack(cocos2d::Ref* pSender);
+
 private:
     int prizeNumber;
-    int prizeSize;
+    float prizeSize;
 };
 
 #endif // __PRIZE_SCENE_H__
