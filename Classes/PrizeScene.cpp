@@ -38,8 +38,10 @@ bool Prize::init() {
     playButton->setScale(MAX(playButton->getContentSize().width / visibleSize.width,
                              playButton->getContentSize().height / visibleSize.height));
     // setting button text
-    playButton->setTitleAlignment(TextHAlignment::CENTER);
-    playButton->setTitleText("Claim");
+    auto playButtonLabel = Label::createWithTTF("Claim", "arial.ttf", 20);
+    playButtonLabel->setAlignment(TextHAlignment::CENTER,TextVAlignment::CENTER);
+    playButtonLabel->enableOutline(Color4B::ORANGE, 1);
+    playButton->setTitleLabel(playButtonLabel);
 
     // setting button functionality
     playButton->addTouchEventListener(CC_CALLBACK_1(Prize::claimPrizeCallBack,this));
@@ -68,63 +70,63 @@ bool Prize::init() {
     switch(prizeNumber) {
         case 0:
             prizeSprite = Sprite::create("heart.png");
-            prizeAmount = Label::createWithSystemFont("30x\nmins","Arial", 9,
+            prizeAmount = Label::createWithTTF("30x\nmins","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
             break;
         case 1:
             prizeSprite = Sprite::create("brush.png");
-            prizeAmount = Label::createWithSystemFont("3x","Arial", 9,
+            prizeAmount = Label::createWithTTF("3x","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
             break;
         case 2:
             prizeSprite = Sprite::create("gem.png");
-            prizeAmount = Label::createWithSystemFont("35x","Arial", 9,
+            prizeAmount = Label::createWithTTF("35x","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
             break;
         case 3:
             prizeSprite = Sprite::create("hammer.png");
-            prizeAmount = Label::createWithSystemFont("3x","Arial", 9,
+            prizeAmount = Label::createWithTTF("3x","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
             break;
         case 4:
             prizeSprite = Sprite::create("coin.png");
-            prizeAmount = Label::createWithSystemFont("750x","Arial", 9,
+            prizeAmount = Label::createWithTTF("750x","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
             break;
         case 5:
             prizeSprite = Sprite::create("brush.png");
-            prizeAmount = Label::createWithSystemFont("1x","Arial", 9,
+            prizeAmount = Label::createWithTTF("1x","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
             break;
         case 6:
             prizeSprite = Sprite::create("gem.png");
-            prizeAmount = Label::createWithSystemFont("75x","Arial", 9,
+            prizeAmount = Label::createWithTTF("75x","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
             break;
         case 7:
             prizeSprite = Sprite::create("hammer.png");
-            prizeAmount = Label::createWithSystemFont("1x","Arial", 9,
+            prizeAmount = Label::createWithTTF("1x","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
             break;
         default:
             prizeSprite = Sprite::create("heart.png");
-            prizeAmount = Label::createWithSystemFont("30x\nmins","Arial", 9,
+            prizeAmount = Label::createWithTTF("30x\nmins","arial.ttf", 9,
                                                       Size(prizeSize,prizeSize),
                                                       TextHAlignment::RIGHT,
                                                       TextVAlignment::BOTTOM);
@@ -154,6 +156,9 @@ bool Prize::init() {
         prizeAmount->getContentSize().height <= 0) {
         problemLoading("'amounts'");
     } else {
+        // set outline
+        prizeAmount->enableOutline(Color4B::ORANGE, 1);
+
         // setting anchor point position
         float x = origin.x + visibleSize.width / 2;
         float y = origin.y + visibleSize.height / 5 * 3;

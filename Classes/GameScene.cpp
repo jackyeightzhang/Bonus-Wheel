@@ -31,8 +31,10 @@ bool Game::initPlayButton(const Vec2& origin, const Size& visibleSize) {
     playButton->setScale(MAX(playButton->getContentSize().width / visibleSize.width,
                              playButton->getContentSize().height / visibleSize.height));
     // setting button text
-    playButton->setTitleAlignment(TextHAlignment::CENTER);
-    playButton->setTitleText("Play On");
+    auto playButtonLabel = Label::createWithTTF("Play on", "arial.ttf", 20);
+    playButtonLabel->setAlignment(TextHAlignment::CENTER,TextVAlignment::CENTER);
+    playButtonLabel->enableOutline(Color4B::ORANGE, 1);
+    playButton->setTitleLabel(playButtonLabel);
 
     // setting button functionality
     playButton->addTouchEventListener(CC_CALLBACK_1(Game::spinSceneCallback,this));
@@ -97,35 +99,35 @@ Vector<Sprite*> Game::initPrizes(Scene* scene, const Vec2& origin, const Size& v
 }
 Vector<Label*> Game::initAmounts(Scene* scene, const Vec2& origin, const Size& visibleSize, const float& prize_size) {
     // create prize labels
-    auto life30Label_1 = Label::createWithSystemFont("30x\nmins","Arial", 9,
+    auto life30Label_1 = Label::createWithTTF("30x\nmins","arial.ttf", 9,
                                                 Size(prize_size,prize_size),
                                                 TextHAlignment::RIGHT,
                                                 TextVAlignment::BOTTOM);
-    auto brush3Label_2 = Label::createWithSystemFont("3x","Arial", 9,
+    auto brush3Label_2 = Label::createWithTTF("3x","arial.ttf", 9,
                                                 Size(prize_size,prize_size),
                                                 TextHAlignment::RIGHT,
                                                 TextVAlignment::BOTTOM);
-    auto gems35Label_3 = Label::createWithSystemFont("35x","Arial", 9,
+    auto gems35Label_3 = Label::createWithTTF("35x","arial.ttf", 9,
                                                 Size(prize_size,prize_size),
                                                 TextHAlignment::RIGHT,
                                                 TextVAlignment::BOTTOM);
-    auto hammer3Label_4 = Label::createWithSystemFont("3x","Arial", 9,
+    auto hammer3Label_4 = Label::createWithTTF("3x","arial.ttf", 9,
                                                 Size(prize_size,prize_size),
                                                 TextHAlignment::RIGHT,
                                                 TextVAlignment::BOTTOM);
-    auto coins750Label_5 = Label::createWithSystemFont("750x","Arial", 9,
+    auto coins750Label_5 = Label::createWithTTF("750x","arial.ttf", 9,
                                                  Size(prize_size,prize_size),
                                                  TextHAlignment::RIGHT,
                                                  TextVAlignment::BOTTOM);
-    auto brush1Label_6 = Label::createWithSystemFont("1x","Arial", 9,
+    auto brush1Label_6 = Label::createWithTTF("1x","arial.ttf", 9,
                                                 Size(prize_size,prize_size),
                                                 TextHAlignment::RIGHT,
                                                 TextVAlignment::BOTTOM);
-    auto gems75Label_7 = Label::createWithSystemFont("75x","Arial", 9,
+    auto gems75Label_7 = Label::createWithTTF("75x","arial.ttf", 9,
                                                 Size(prize_size,prize_size),
                                                 TextHAlignment::RIGHT,
                                                 TextVAlignment::BOTTOM);
-    auto hammer1Label_8 = Label::createWithSystemFont("1x","Arial", 9,
+    auto hammer1Label_8 = Label::createWithTTF("1x","arial.ttf", 9,
                                                 Size(prize_size,prize_size),
                                                 TextHAlignment::RIGHT,
                                                 TextVAlignment::BOTTOM);
@@ -144,6 +146,9 @@ Vector<Label*> Game::initAmounts(Scene* scene, const Vec2& origin, const Size& v
             label->getContentSize().height <= 0) {
             problemLoading("'amounts'");
         } else {
+            // set outline
+            label->enableOutline(Color4B::ORANGE, 1);
+
             // setting anchor point position
             float x = origin.x + visibleSize.width / 2;
             float y = origin.y + visibleSize.height / 5 * 3;
